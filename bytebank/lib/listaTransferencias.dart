@@ -1,3 +1,4 @@
+import 'package:bytebank/FormularioTransferencias.dart';
 import 'package:bytebank/itemTransferencia.dart';
 import 'package:bytebank/transferencia.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,16 @@ class ListaTransferencias extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: null,
+        onPressed: () {
+          final Future<Transferecia> future = Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => FormularioTransferencias()));
+
+          future.then((Transferecia transferenciaRecebida) {
+            debugPrint('$transferenciaRecebida');
+          });
+        },
         child: Icon(Icons.add),
       ),
     );
