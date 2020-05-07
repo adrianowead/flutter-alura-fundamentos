@@ -3,17 +3,29 @@ import 'package:bytebank/itemTransferencia.dart';
 import 'package:bytebank/transferencia.dart';
 import 'package:flutter/material.dart';
 
-class ListaTransferencias extends StatelessWidget {
+class ListaTransferencias extends StatefulWidget {
+  final List<Transferecia> _transferencias =
+      List(); // inicializando com uma lista vazia
+
+  @override
+  State<StatefulWidget> createState() {
+    return ListaTransferenciasState();
+  }
+}
+
+class ListaTransferenciasState extends State<ListaTransferencias> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Tranferências')),
-      body: Column(
-        children: <Widget>[
-          ItemTransferencia(Transferecia(valor: 100, conta: 1000)),
-          ItemTransferencia(Transferecia(valor: 950, conta: 3000)),
-          ItemTransferencia(Transferecia(valor: 50, conta: 200)),
-        ],
+      // o listview builder, suporta atualizações dinâmicas
+      // diferente do listview simples
+      body: ListView.builder(
+        itemCount: widget._transferencias.length,
+        itemBuilder: (BuildContext context, int index) {
+          final transf = widget._transferencias[index];
+          return ItemTransferencia(transf);
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -23,7 +35,7 @@ class ListaTransferencias extends StatelessWidget {
                   builder: (context) => FormularioTransferencias()));
 
           future.then((Transferecia transferenciaRecebida) {
-            debugPrint('$transferenciaRecebida');
+            widget._transferencias.add(transferenciaRecebida);
           });
         },
         child: Icon(Icons.add),
