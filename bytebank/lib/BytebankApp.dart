@@ -1,4 +1,4 @@
-import 'package:bytebank/listaTransferencias.dart';
+import 'package:bytebank/screens/transferencias/Lista.dart';
 import 'package:flutter/material.dart';
 
 class BytebankApp extends StatelessWidget {

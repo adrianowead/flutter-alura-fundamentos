@@ -1,7 +1,7 @@
-import 'package:bytebank/Editor.dart';
+import 'package:bytebank/components/Editor.dart';
 import 'package:flutter/material.dart';
 
-import 'transferencia.dart';
+import 'package:bytebank/models/Transferencia.dart';
 
 class FormularioTransferencias extends StatefulWidget {
   final TextEditingController _ctrlCampoNumeroConta = TextEditingController();
@@ -13,7 +13,7 @@ class FormularioTransferencias extends StatefulWidget {
 
     if (numeroConta != null && valor != null) {
       final transferenciaCriada =
-          Transferecia(valor: valor, conta: numeroConta);
+          Transferencia(valor: valor, conta: numeroConta);
 
       Navigator.pop(context, transferenciaCriada);
     }
