@@ -35,7 +35,8 @@ class ListaTransferenciasState extends State<ListaTransferencias> {
                   builder: (context) => FormularioTransferencias()));
 
           future.then((Transferecia transferenciaRecebida) {
-            widget._transferencias.add(transferenciaRecebida);
+            if (transferenciaRecebida != null)
+              widget._transferencias.add(transferenciaRecebida);
           });
         },
         child: Icon(Icons.add),
