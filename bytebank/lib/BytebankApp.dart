@@ -1,4 +1,4 @@
-import 'package:bytebank/screens/transferencias/Lista.dart';
+import 'package:bytebank/screens/Home.dart';
 import 'package:flutter/material.dart';
 
 class BytebankApp extends StatelessWidget {
@@ -6,7 +6,7 @@ class BytebankApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'ByteBank',
-      home: ListaTransferencias(),
+      home: Home(),
       theme: ThemeData(
           primaryColor: Colors.green[900],
           accentColor: Colors.blue[700],
