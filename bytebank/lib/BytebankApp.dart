@@ -1,4 +1,4 @@
-import 'package:bytebank/screens/Home.dart';
+import 'package:bytebank/screens/home/Home.dart';
 import 'package:flutter/material.dart';
 
 class BytebankApp extends StatelessWidget {
@@ -8,12 +8,13 @@ class BytebankApp extends StatelessWidget {
       title: 'ByteBank',
       home: Home(),
       theme: ThemeData(
-          primaryColor: Colors.green[900],
-          accentColor: Colors.blue[700],
-          buttonTheme: ButtonThemeData(
-            buttonColor: Colors.blue[700],
-            textTheme: ButtonTextTheme.primary,
-          )),
+        primaryColor: Colors.green[900],
+        accentColor: Colors.blue[700],
+        buttonTheme: ButtonThemeData(
+          buttonColor: Colors.blue[700],
+          textTheme: ButtonTextTheme.primary,
+        ),
+      ),
     );
   }
 }

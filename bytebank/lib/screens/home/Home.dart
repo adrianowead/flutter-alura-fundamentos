@@ -1,5 +1,5 @@
-import 'package:bytebank/screens/Dashboard.dart';
-import 'package:bytebank/screens/SideMenu.dart';
+import 'package:bytebank/screens/home/Dashboard.dart';
+import 'package:bytebank/screens/menu/SideMenu.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
