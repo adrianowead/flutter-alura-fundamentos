@@ -12,9 +12,8 @@ class Dashboard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Image.asset('images/bytebank_logo.png'),
         ),
-        FlatButton(
-          padding: EdgeInsets.zero,
-          onPressed: () {
+        GestureDetector(
+          onTap: () {
             Navigator.push(
               context,
               MaterialPageRoute(
