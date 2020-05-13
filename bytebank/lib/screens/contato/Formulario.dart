@@ -32,23 +32,31 @@ class _FormularioContatoState extends State<FormularioContato> {
         title: Text('Criando Contato'),
       ),
       body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          Editor(
-            ctrl: widget._ctrlCampoNome,
-            rotulo: 'Nome',
-            dica: 'Fulano',
-            tipo: TextInputType.text,
-          ),
-          Editor(
-            ctrl: widget._ctrlCampoConta,
-            rotulo: 'Conta',
-            dica: '0000',
-          ),
-          RaisedButton(
-            child: Text('Confirmar'),
-            onPressed: () => widget._criaContato(context),
-          )
-        ]),
+        child: Column(
+          children: <Widget>[
+            Editor(
+              ctrl: widget._ctrlCampoNome,
+              rotulo: 'Nome',
+              dica: 'Fulano',
+              tipo: TextInputType.text,
+            ),
+            Editor(
+              ctrl: widget._ctrlCampoConta,
+              rotulo: 'Conta',
+              dica: '0000',
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: double.maxFinite,
+                child: RaisedButton(
+                  child: Text('Confirmar'),
+                  onPressed: () => widget._criaContato(context),
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }
