@@ -43,9 +43,23 @@ class ListaContatos extends StatelessWidget {
               return ListView.builder(
                 itemBuilder: (BuildContext context, int index) {
                   final contato = contatos[index];
-                  return ItemContato(
-                    nome: contato.nome,
-                    conta: contato.conta,
+                  return Dismissible(
+                    key: Key(index.toString()),
+                    direction: DismissDirection.endToStart,
+                    background: Container(
+                      padding: EdgeInsets.all(16.0),
+                      alignment: Alignment.centerRight,
+                      color: Colors.red[700],
+                      child: Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                    ),
+                    child: ItemContato(
+                      nome: contato.nome,
+                      conta: contato.conta,
+                    ),
+                    onDismissed: (_) => this._contatoDao.delete(contato.id),
                   );
                 },
                 itemCount: contatos.length,
