@@ -30,9 +30,11 @@ class ListaTransferenciasState extends State<ListaTransferencias> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final Future<Transferencia> future = Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => FormularioTransferencias()));
+            context,
+            MaterialPageRoute(
+              builder: (context) => FormularioTransferencias(),
+            ),
+          );
 
           future.then((Transferencia transferenciaRecebida) =>
               this._atualiza(transferenciaRecebida));
