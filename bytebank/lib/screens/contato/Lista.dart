@@ -1,11 +1,13 @@
 import 'dart:async';
 
-import 'package:bytebank/models/Contato.dart';
+import 'package:bytebank/database/dao/ContatoDao.dart';
 import 'package:bytebank/models/ItemContato.dart';
 import 'package:bytebank/screens/contato/Formulario.dart';
 import 'package:flutter/material.dart';
 
 class ListaContatos extends StatelessWidget {
+  final ContatoDao _contatoDao = ContatoDao();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,32 +65,17 @@ class ListaContatos extends StatelessWidget {
             ),
           );
 
-          future.then(
-            (ItemContato contatoRecebido) =>
-                this._atualiza(context, contatoRecebido),
-          );
+          future.then((value) => (context as Element).reassemble());
         },
         child: Icon(Icons.add),
       ),
     );
   }
 
-  void _atualiza(BuildContext context, ItemContato contatoRecebido) {
-    if (contatoRecebido != null) {
-      final Contato contatoModel = new Contato();
-
-      contatoModel.save(contatoRecebido).then((value) {
-        // forçando um reload para StatelessWidget
-        (context as Element).reassemble();
-      });
-    }
-  }
-
   FutureOr<List<ItemContato>> _carregaBancoDados() {
-    final Contato contatoModel = new Contato();
     final List<ItemContato> listaContatos = List();
 
-    return contatoModel.findAll().then((lista) {
+    return this._contatoDao.findAll().then((lista) {
       listaContatos.addAll(lista);
 
       return listaContatos;
