@@ -1,37 +1,58 @@
+import 'dart:async';
+
 import 'package:bytebank/models/Contato.dart';
 import 'package:bytebank/models/ItemContato.dart';
 import 'package:bytebank/screens/contato/Formulario.dart';
 import 'package:flutter/material.dart';
 
-class ListaContatos extends StatefulWidget {
-  final List<ItemContato> _contatos =
-      List(); // inicializando com uma lista vazia
-
-  @override
-  _ListaContatosState createState() => _ListaContatosState();
-}
-
-class _ListaContatosState extends State<ListaContatos> {
-  @override
-  void initState() {
-    this._carregaBancoDados();
-  }
-
+class ListaContatos extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Contatos'),
       ),
-      body: ListView.builder(
-        itemBuilder: (BuildContext context, int index) {
-          final contato = widget._contatos[index];
-          return ItemContato(
-            nome: contato.nome,
-            conta: contato.conta,
-          );
+      body: FutureBuilder<List<ItemContato>>(
+        initialData: List(),
+        future: this._carregaBancoDados(),
+        builder: (context, snapshot) {
+          switch (snapshot.connectionState) {
+            case ConnectionState.none:
+              break;
+            case ConnectionState.waiting:
+              return Center(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      CircularProgressIndicator(),
+                      Padding(
+                        padding: EdgeInsets.all(16.0),
+                        child: Text("Carregando..."),
+                      ),
+                    ]),
+              );
+              break;
+            case ConnectionState.active:
+              break;
+            case ConnectionState.done:
+              final List<ItemContato> contatos = snapshot.data;
+
+              return ListView.builder(
+                itemBuilder: (BuildContext context, int index) {
+                  final contato = contatos[index];
+                  return ItemContato(
+                    nome: contato.nome,
+                    conta: contato.conta,
+                  );
+                },
+                itemCount: contatos.length,
+              );
+              break;
+          }
+
+          return Text("Conteúdo não encontrado");
         },
-        itemCount: widget._contatos.length,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -43,7 +64,8 @@ class _ListaContatosState extends State<ListaContatos> {
           );
 
           future.then(
-            (ItemContato contatoRecebido) => this._atualiza(contatoRecebido),
+            (ItemContato contatoRecebido) =>
+                this._atualiza(context, contatoRecebido),
           );
         },
         child: Icon(Icons.add),
@@ -51,24 +73,25 @@ class _ListaContatosState extends State<ListaContatos> {
     );
   }
 
-  void _atualiza(ItemContato contatoRecebido) {
+  void _atualiza(BuildContext context, ItemContato contatoRecebido) {
     if (contatoRecebido != null) {
       final Contato contatoModel = new Contato();
 
-      contatoModel.save(contatoRecebido).then((insertId) {
-        this._carregaBancoDados();
+      contatoModel.save(contatoRecebido).then((value) {
+        // forçando um reload para StatelessWidget
+        (context as Element).reassemble();
       });
     }
   }
 
-  void _carregaBancoDados() {
+  FutureOr<List<ItemContato>> _carregaBancoDados() {
     final Contato contatoModel = new Contato();
+    final List<ItemContato> listaContatos = List();
 
-    contatoModel.findAll().then((list) {
-      // o set state, força a execução do build, e assim garantindo a atualização da tela com os dados
-      setState(() {
-        widget._contatos.addAll(list);
-      });
+    return contatoModel.findAll().then((lista) {
+      listaContatos.addAll(lista);
+
+      return listaContatos;
     });
   }
 }
