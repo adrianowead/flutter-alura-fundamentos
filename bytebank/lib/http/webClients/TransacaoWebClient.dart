@@ -16,13 +16,14 @@ class TransacaoWebClient extends WebClient {
     final List<dynamic> decodedJson = jsonDecode(response.body);
 
     return decodedJson
-      .map((dynamic json) => Transferencia.fromJson(json))
-      .toList();
+        .map((dynamic json) => Transferencia.fromJson(json))
+        .toList();
   }
 
   Future<Transferencia> save(Transferencia transferencia) async {
     final Client client = this.geClient();
-    final String transferenciaJson = jsonEncode(transferencia.toJson());
+
+    print(transferencia.toJson());
 
     final Response response = await client.post(
       this._baseUrl,
@@ -30,7 +31,7 @@ class TransacaoWebClient extends WebClient {
         'Content-type': 'application/json',
         'password': '1000',
       },
-      body: transferenciaJson,
+      body: jsonEncode(transferencia.toJson()),
     );
 
     return Transferencia.fromJson(jsonDecode(response.body));
