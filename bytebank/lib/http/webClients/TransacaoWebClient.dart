@@ -13,10 +13,11 @@ class TransacaoWebClient extends WebClient {
     final Response response =
         await client.get(this._baseUrl).timeout(Duration(seconds: 5));
 
-    final List<dynamic> transacaoJson = jsonDecode(response.body);
-    final List<Transferencia> transferencias = _toTransactions(transacaoJson);
+    final List<dynamic> decodedJson = jsonDecode(response.body);
 
-    return transferencias;
+    return decodedJson
+      .map((dynamic json) => Transferencia.fromJson(json))
+      .toList();
   }
 
   Future<Transferencia> save(Transferencia transferencia) async {
@@ -32,21 +33,6 @@ class TransacaoWebClient extends WebClient {
       body: transferenciaJson,
     );
 
-    return _toTransaction(response);
-  }
-
-  Transferencia _toTransaction(Response response) {
-    final Map<String, dynamic> json = jsonDecode(response.body);
-
-    return Transferencia.fromJson(json);
-  }
-
-  List<Transferencia> _toTransactions(List transacaoJson) {
-    final List<Transferencia> transferencias = List();
-
-    for (Map<String, dynamic> item in transacaoJson) {
-      transferencias.add(Transferencia.fromJson(item));
-    }
-    return transferencias;
+    return Transferencia.fromJson(jsonDecode(response.body));
   }
 }
