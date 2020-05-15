@@ -8,7 +8,12 @@ class ItemContato extends StatelessWidget {
 
   final Function onClick;
 
-  const ItemContato({Key key, this.id = 0, this.nome, this.conta, @required this.onClick})
+  const ItemContato(
+      {Key key,
+      this.id = 0,
+      this.nome,
+      this.conta,
+      @required this.onClick})
       : super(key: key);
 
   @override
@@ -30,4 +35,13 @@ class ItemContato extends StatelessWidget {
       ),
     );
   }
+
+  ItemContato.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        nome = json['name'],
+        conta = json['accountNumber'],
+        onClick = null;
+
+  Map<String, dynamic> toJson() =>
+      {'id': id, 'name': nome, 'accountNumber': conta};
 }
