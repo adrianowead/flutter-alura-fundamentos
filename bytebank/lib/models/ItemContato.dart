@@ -6,13 +6,16 @@ class ItemContato extends StatelessWidget {
   final String nome;
   final int conta;
 
-  const ItemContato({Key key, this.id = 0, this.nome, this.conta})
+  final Function onClick;
+
+  const ItemContato({Key key, this.id = 0, this.nome, this.conta, @required this.onClick})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Card(
       child: ListTile(
+        onTap: this.onClick,
         title: Text(
           this.nome,
           style: TextStyle(

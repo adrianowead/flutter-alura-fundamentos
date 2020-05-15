@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 class ItemDashboard extends StatelessWidget {
   final String nome;
   final IconData icone;
-  final Function callback;
+  final Function onClick;
 
-  const ItemDashboard({Key key, this.nome, this.icone, this.callback})
+  const ItemDashboard({Key key, this.nome, this.icone, @required this.onClick})
       : super(key: key);
 
   @override
@@ -15,7 +15,7 @@ class ItemDashboard extends StatelessWidget {
       child: Material(
         color: Theme.of(context).primaryColor,
         child: InkWell(
-          onTap: this.callback,
+          onTap: this.onClick,
           child: Container(
             padding: EdgeInsets.all(8.0),
             height: 100,

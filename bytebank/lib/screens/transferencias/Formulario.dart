@@ -1,4 +1,5 @@
 import 'package:bytebank/components/Editor.dart';
+import 'package:bytebank/models/ItemContato.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bytebank/models/Transferencia.dart';
@@ -6,6 +7,9 @@ import 'package:bytebank/models/Transferencia.dart';
 class FormularioTransferencias extends StatefulWidget {
   final TextEditingController _ctrlCampoNumeroConta = TextEditingController();
   final TextEditingController _ctrlCampoValor = TextEditingController();
+  final ItemContato contato;
+
+  FormularioTransferencias({Key key, this.contato}) : super(key: key);
 
   void _criaTransferencia(BuildContext context) {
     final int numeroConta = int.tryParse(this._ctrlCampoNumeroConta.text);
@@ -13,7 +17,7 @@ class FormularioTransferencias extends StatefulWidget {
 
     if (numeroConta != null && valor != null) {
       final transferenciaCriada =
-          Transferencia(valor: valor, conta: numeroConta);
+          Transferencia(valor: valor, conta: numeroConta, contato: this.contato);
 
       Navigator.pop(context, transferenciaCriada);
     }

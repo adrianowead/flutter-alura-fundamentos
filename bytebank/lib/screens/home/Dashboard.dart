@@ -1,5 +1,6 @@
 import 'package:bytebank/screens/contato/Lista.dart';
 import 'package:bytebank/screens/home/ItemDashboard.dart';
+import 'package:bytebank/screens/transferencias/Lista.dart';
 import 'package:flutter/material.dart';
 
 class Dashboard extends StatelessWidget {
@@ -13,26 +14,35 @@ class Dashboard extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: Image.asset('images/bytebank_logo.png'),
         ),
-        Row(
-          children: <Widget>[
-            ItemDashboard(
-              nome: 'Transfer',
-              icone: Icons.monetization_on,
-              callback: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ListaContatos(),
-                  ),
-                );
-              },
-            ),
-            ItemDashboard(
-              nome: 'Transaction Feed',
-              icone: Icons.description,
-              callback: () {},
-            ),
-          ],
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: <Widget>[
+              ItemDashboard(
+                nome: 'Pessoas',
+                icone: Icons.people,
+                onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ListaContatos(),
+                    ),
+                  );
+                },
+              ),
+              ItemDashboard(
+                nome: 'Transferências',
+                icone: Icons.swap_horiz, onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ListaTransferencias(),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );
