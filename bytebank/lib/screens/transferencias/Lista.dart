@@ -1,17 +1,19 @@
 import 'package:bytebank/components/CarregandoSpinner.dart';
 import 'package:bytebank/components/SemConteudo.dart';
-import 'package:bytebank/http/WebclientTransacoes.dart';
+import 'package:bytebank/http/webClients/TransacaoWebClient.dart';
 import 'package:bytebank/models/ItemTransferencia.dart';
 import 'package:bytebank/models/Transferencia.dart';
 import 'package:flutter/material.dart';
 
 class ListaTransferencias extends StatelessWidget {
+  final TransacaoWebClient _webClient = TransacaoWebClient();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Tranferências')),
       body: FutureBuilder<List<Transferencia>>(
-        future: WebclientTransacoes().findAll(),
+        future: this._webClient.findAll(),
         builder: (context, snapshot) {
           switch (snapshot.connectionState) {
             case ConnectionState.none:
@@ -24,7 +26,7 @@ class ListaTransferencias extends StatelessWidget {
             case ConnectionState.active:
               break;
             case ConnectionState.done:
-              if(snapshot.hasData){
+              if (snapshot.hasData) {
                 final List<Transferencia> transferencias = snapshot.data;
 
                 if (transferencias.isNotEmpty) {
@@ -41,7 +43,9 @@ class ListaTransferencias extends StatelessWidget {
               break;
           }
 
-          return SemConteudo(message: "Não há transações!",);
+          return SemConteudo(
+            message: "Não há transações!",
+          );
         },
       ),
     );

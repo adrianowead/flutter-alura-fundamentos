@@ -3,15 +3,15 @@ import 'dart:async';
 import 'package:bytebank/components/CarregandoSpinner.dart';
 import 'package:bytebank/components/SemConteudo.dart';
 import 'package:bytebank/database/dao/ContatoDao.dart';
-import 'package:bytebank/http/WebclientTransacoes.dart';
+import 'package:bytebank/http/webClients/TransacaoWebClient.dart';
 import 'package:bytebank/models/ItemContato.dart';
-import 'package:bytebank/models/Transferencia.dart';
 import 'package:bytebank/screens/contato/Formulario.dart';
 import 'package:bytebank/screens/transferencias/Formulario.dart';
 import 'package:flutter/material.dart';
 
 class ListaContatos extends StatelessWidget {
   final ContatoDao _contatoDao = ContatoDao();
+  final TransacaoWebClient _webClient = TransacaoWebClient();
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +64,7 @@ class ListaContatos extends StatelessWidget {
                             );
 
                             resp.then((transferencia) {
-                              WebclientTransacoes()
+                              this._webClient
                                   .save(transferencia)
                                   .then((salvo) {
                                 if (salvo != null) {
