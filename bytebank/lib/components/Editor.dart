@@ -12,7 +12,7 @@ class Editor extends StatelessWidget {
     this.rotulo,
     this.dica,
     this.icon,
-    this.tipo = TextInputType.phone,
+    this.tipo = TextInputType.number,
   });
 
   @override

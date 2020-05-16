@@ -5,13 +5,12 @@ import 'package:bytebank/models/Transferencia.dart';
 import 'package:http/http.dart';
 
 class TransacaoWebClient extends WebClient {
-  final String _baseUrl = 'http://192.168.1.7:8080/transactions';
+  final String _baseUrl = 'http://192.168.1.5:8080/transactions';
 
   Future<List<Transferencia>> findAll() async {
     final Client client = this.geClient();
 
-    final Response response =
-        await client.get(this._baseUrl).timeout(Duration(seconds: 5));
+    final Response response = await client.get(this._baseUrl);
 
     final List<dynamic> decodedJson = jsonDecode(response.body);
 
@@ -20,20 +19,42 @@ class TransacaoWebClient extends WebClient {
         .toList();
   }
 
-  Future<Transferencia> save(Transferencia transferencia) async {
+  Future<Transferencia> save(Transferencia transferencia, String passwd) async {
     final Client client = this.geClient();
-
-    print(transferencia.toJson());
 
     final Response response = await client.post(
       this._baseUrl,
       headers: {
         'Content-type': 'application/json',
-        'password': '1000',
+        'password': passwd,
       },
       body: jsonEncode(transferencia.toJson()),
     );
 
-    return Transferencia.fromJson(jsonDecode(response.body));
+    if (response.statusCode == 200) {
+      return Transferencia.fromJson(jsonDecode(response.body));
+    }
+
+    throw HttpException(_getMessage(response.statusCode));
   }
+
+  String _getMessage(int statusCode) {
+    if (_statusCodeResponse.containsKey(statusCode)) {
+      return _statusCodeResponse[statusCode];
+    }
+
+    return "Retorno inesperado do serviço online.";
+  }
+
+  static final Map<int, String> _statusCodeResponse = {
+    400: 'Falha ao enviar a transação!',
+    401: 'Falha na autenticação!',
+    409: 'Esta transação já existe.'
+  };
+}
+
+class HttpException implements Exception {
+  final String message;
+
+  HttpException(this.message);
 }

@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:bytebank/components/CarregandoSpinner.dart';
 import 'package:bytebank/components/SemConteudo.dart';
 import 'package:bytebank/database/dao/ContatoDao.dart';
-import 'package:bytebank/http/webClients/TransacaoWebClient.dart';
 import 'package:bytebank/models/ItemContato.dart';
 import 'package:bytebank/screens/contato/Formulario.dart';
 import 'package:bytebank/screens/transferencias/Formulario.dart';
@@ -11,7 +10,6 @@ import 'package:flutter/material.dart';
 
 class ListaContatos extends StatelessWidget {
   final ContatoDao _contatoDao = ContatoDao();
-  final TransacaoWebClient _webClient = TransacaoWebClient();
 
   @override
   Widget build(BuildContext context) {
@@ -56,22 +54,13 @@ class ListaContatos extends StatelessWidget {
                         child: ItemContato(
                           nome: contato.nome,
                           conta: contato.conta,
-                          onClick: () {
-                            final resp = Navigator.of(context).push(
-                              MaterialPageRoute(builder: (context) {
-                                return FormularioTransferencias(contato: contato);
-                              }),
+                          onClick: () async {
+                            Navigator.of(context).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    FormularioTransferencias(contato: contato),
+                              ),
                             );
-
-                            resp.then((transferencia) {
-                              this._webClient
-                                  .save(transferencia)
-                                  .then((salvo) {
-                                if (salvo != null) {
-                                  debugPrint('item salvo online');
-                                }
-                              });
-                            });
                           },
                         ),
                         onDismissed: (_) => this._contatoDao.delete(contato.id),

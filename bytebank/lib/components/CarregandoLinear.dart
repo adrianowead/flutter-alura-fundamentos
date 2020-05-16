@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class CarregandoSpinner extends StatelessWidget {
+class CarregandoLinear extends StatelessWidget {
   final String message;
 
-  const CarregandoSpinner({
+  const CarregandoLinear({
     Key key,
     this.message = "Carregando...",
   }) : super(key: key);
@@ -15,7 +15,7 @@ class CarregandoSpinner extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            CircularProgressIndicator(),
+            LinearProgressIndicator(),
             Padding(
               padding: EdgeInsets.only(top: 16.0),
               child: Text(
