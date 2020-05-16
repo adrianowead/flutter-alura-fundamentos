@@ -1,19 +1,21 @@
 import 'package:bytebank/components/Editor.dart';
+import 'package:bytebank/models/ItemContato.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bytebank/models/Transferencia.dart';
 
 class FormularioTransferencias extends StatefulWidget {
-  final TextEditingController _ctrlCampoNumeroConta = TextEditingController();
   final TextEditingController _ctrlCampoValor = TextEditingController();
+  final ItemContato contato;
+
+  FormularioTransferencias({Key key, this.contato}) : super(key: key);
 
   void _criaTransferencia(BuildContext context) {
-    final int numeroConta = int.tryParse(this._ctrlCampoNumeroConta.text);
     final double valor = double.tryParse(this._ctrlCampoValor.text);
 
-    if (numeroConta != null && valor != null) {
+    if (valor != null) {
       final transferenciaCriada =
-          Transferencia(valor: valor, conta: numeroConta);
+          Transferencia(valor: valor, contato: this.contato);
 
       Navigator.pop(context, transferenciaCriada);
     }
@@ -34,10 +36,31 @@ class FormularioTransferenciasState extends State<FormularioTransferencias> {
       ),
       body: SingleChildScrollView(
         child: Column(children: <Widget>[
-          Editor(
-              ctrl: widget._ctrlCampoNumeroConta,
-              rotulo: 'Número da conta',
-              dica: '0000'),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 1.0),
+            child: Container(
+              child: Text(
+                widget.contato.nome,
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              width: double.maxFinite,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 8.0),
+            child: Container(
+              child: Text(
+                widget.contato.conta.toString(),
+                style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              width: double.maxFinite,
+            ),
+          ),
           Editor(
               ctrl: widget._ctrlCampoValor,
               rotulo: 'Valor',

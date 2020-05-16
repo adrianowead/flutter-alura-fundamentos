@@ -45,10 +45,11 @@ class ContatoDao extends Contato {
     final List<ItemContato> contatos = List();
 
     for (Map<String, dynamic> row in result) {
-      contatos.add(new ItemContato(
+      contatos.add(ItemContato(
         id: row[_fieldId],
         nome: row[_fieldNome],
         conta: row[_fieldConta],
+        onClick: null,
       ));
     }
     return contatos;

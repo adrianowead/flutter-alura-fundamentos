@@ -1,11 +1,18 @@
+import 'package:bytebank/models/ItemContato.dart';
+
 class Transferencia {
   final double valor;
-  final int conta;
+  final ItemContato contato;
 
-  Transferencia({this.valor, this.conta});
+  Transferencia({this.contato, this.valor});
 
-  @override
-  String toString() {
-    return 'Transferencia{valor: $valor, numeroConta: $conta}';
-  }
+  Transferencia.fromJson(Map<String, dynamic> json)
+      : valor = json['value'],
+        contato = ItemContato.fromJson(json['contact']);
+        
+  Map<String, dynamic> toJson() =>
+    {
+      'value': valor,
+      'contact':  contato.toJson()
+    };
 }

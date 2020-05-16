@@ -20,6 +20,7 @@ class FormularioContato extends StatefulWidget {
       final contatoCriado = ItemContato(
         nome: nome,
         conta: conta,
+        onClick: null,
       );
 
       await this._contatoDao.save(contatoCriado);

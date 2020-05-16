@@ -13,7 +13,7 @@ class ItemTransferencia extends StatelessWidget {
       child: ListTile(
         leading: Icon(Icons.monetization_on),
         title: Text(this._transferencia.valor.toString()),
-        subtitle: Text(this._transferencia.conta.toString()),
+        subtitle: Text(this._transferencia.contato.conta.toString()),
       ),
     );
   }
