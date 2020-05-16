@@ -10,8 +10,7 @@ class TransacaoWebClient extends WebClient {
   Future<List<Transferencia>> findAll() async {
     final Client client = this.geClient();
 
-    final Response response =
-        await client.get(this._baseUrl).timeout(Duration(seconds: 5));
+    final Response response = await client.get(this._baseUrl);
 
     final List<dynamic> decodedJson = jsonDecode(response.body);
 
@@ -32,12 +31,21 @@ class TransacaoWebClient extends WebClient {
       body: jsonEncode(transferencia.toJson()),
     );
 
-    if (response.statusCode == 400) {
-      throw Exception("Falha ao enviar a transação!");
-    } else if (response.statusCode == 401) {
-      throw Exception("Falha na autenticação!");
+    if (response.statusCode == 200) {
+      return Transferencia.fromJson(jsonDecode(response.body));
     }
 
-    return Transferencia.fromJson(jsonDecode(response.body));
+    throw HttpException(_statusCodeResponse[response.statusCode]);
   }
+
+  static final Map<int, String> _statusCodeResponse = {
+    400: 'Falha ao enviar a transação!',
+    401: 'Falha na autenticação!'
+  };
+}
+
+class HttpException implements Exception {
+  final String message;
+
+  HttpException(this.message);
 }

@@ -1,5 +1,4 @@
 import 'package:bytebank/components/Editor.dart';
-import 'package:bytebank/components/TransferenciaAuthDialog.dart';
 import 'package:bytebank/models/ItemContato.dart';
 import 'package:flutter/material.dart';
 
