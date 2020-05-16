@@ -20,7 +20,7 @@ class _TransferenciaAuthDialogState extends State<TransferenciaAuthDialog> {
       title: Text("Autenticação"),
       content: TextField(
         controller: this._passwdController,
-        keyboardType: TextInputType.phone,
+        keyboardType: TextInputType.number,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
         ),

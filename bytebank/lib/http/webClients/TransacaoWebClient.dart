@@ -35,12 +35,21 @@ class TransacaoWebClient extends WebClient {
       return Transferencia.fromJson(jsonDecode(response.body));
     }
 
-    throw HttpException(_statusCodeResponse[response.statusCode]);
+    throw HttpException(_getMessage(response.statusCode));
+  }
+
+  String _getMessage(int statusCode) {
+    if (_statusCodeResponse.containsKey(statusCode)) {
+      return _statusCodeResponse[statusCode];
+    }
+
+    return "Retorno inesperado do serviço online.";
   }
 
   static final Map<int, String> _statusCodeResponse = {
     400: 'Falha ao enviar a transação!',
-    401: 'Falha na autenticação!'
+    401: 'Falha na autenticação!',
+    409: 'Esta transação já existe.'
   };
 }
 

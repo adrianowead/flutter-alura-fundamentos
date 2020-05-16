@@ -10,11 +10,13 @@ import 'package:flutter/material.dart';
 
 import 'package:bytebank/models/Transferencia.dart';
 import 'package:http_interceptor/models/http_interceptor_exception.dart';
+import 'package:uuid/uuid.dart';
 
 class FormularioTransferencias extends StatefulWidget {
   final TextEditingController _ctrlCampoValor = TextEditingController();
   final ItemContato contato;
   final TransacaoWebClient _webClient = TransacaoWebClient();
+  final String transacaoId = Uuid().v4();
 
   FormularioTransferencias({Key key, this.contato}) : super(key: key);
 
@@ -22,16 +24,22 @@ class FormularioTransferencias extends StatefulWidget {
     final double valor = double.tryParse(this._ctrlCampoValor.text);
 
     if (valor != null) {
-      final transferenciaCriada =
-          Transferencia(valor: valor, contato: this.contato);
+      final transferenciaCriada = Transferencia(
+        id: this.transacaoId,
+        valor: valor,
+        contato: this.contato,
+      );
 
       showDialog(
         context: context,
         builder: (contextAuth) {
           return TransferenciaAuthDialog(
             onConfirm: (String passwd) async {
-              dynamic salvo =
-                  await _savlarOnline(transferenciaCriada, passwd, context);
+              dynamic salvo = await _savlarOnline(
+                transferenciaCriada,
+                passwd,
+                context,
+              );
 
               if (salvo != null) {
                 await showDialog(
