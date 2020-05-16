@@ -35,15 +35,31 @@ class FormularioTransferenciasState extends State<FormularioTransferencias> {
         title: Text('Criando Transferência'),
       ),
       body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
+        child: Column(children: <Widget>[
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 1.0),
-            child: Container(child: Text("Contato", style: TextStyle(fontSize: 16.0,),), width: double.maxFinite,),
+            child: Container(
+              child: Text(
+                widget.contato.nome,
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              width: double.maxFinite,
+            ),
           ),
           Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 8.0),
-            child: Container(child: Text(widget.contato.nome, style: TextStyle(fontSize: 28.0, fontWeight: FontWeight.bold,),), width: double.maxFinite,),
+            child: Container(
+              child: Text(
+                widget.contato.conta.toString(),
+                style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              width: double.maxFinite,
+            ),
           ),
           Editor(
               ctrl: widget._ctrlCampoValor,
