@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:bytebank/components/CarregandoLinear.dart';
 import 'package:bytebank/components/Editor.dart';
 import 'package:bytebank/components/ResponseDialog.dart';
 import 'package:bytebank/components/TransferenciaAuthDialog.dart';
@@ -20,14 +21,83 @@ class FormularioTransferencias extends StatefulWidget {
 
   FormularioTransferencias({Key key, this.contato}) : super(key: key);
 
+  @override
+  State<StatefulWidget> createState() {
+    return FormularioTransferenciasState();
+  }
+}
+
+class FormularioTransferenciasState extends State<FormularioTransferencias> {
+  bool _enviando = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Criando Transferência'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(children: <Widget>[
+          Visibility(
+            visible: _enviando,
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: CarregandoLinear(
+                message: 'Salvando...',
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 1.0),
+            child: Container(
+              child: Text(
+                widget.contato.nome,
+                style: TextStyle(
+                  fontSize: 16.0,
+                ),
+              ),
+              width: double.maxFinite,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 8.0),
+            child: Container(
+              child: Text(
+                widget.contato.conta.toString(),
+                style: TextStyle(
+                  fontSize: 28.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              width: double.maxFinite,
+            ),
+          ),
+          Editor(
+            ctrl: widget._ctrlCampoValor,
+            rotulo: 'Valor',
+            dica: '0.00',
+            icon: Icons.monetization_on,
+          ),
+          RaisedButton(
+            child: Text('Confirmar'),
+            onPressed: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+              this._criaTransferencia(context);
+            },
+          )
+        ]),
+      ),
+    );
+  }
+
   void _criaTransferencia(BuildContext context) {
-    final double valor = double.tryParse(this._ctrlCampoValor.text);
+    final double valor = double.tryParse(widget._ctrlCampoValor.text);
 
     if (valor != null) {
       final transferenciaCriada = Transferencia(
-        id: this.transacaoId,
+        id: widget.transacaoId,
         valor: valor,
-        contato: this.contato,
+        contato: widget.contato,
       );
 
       showDialog(
@@ -62,9 +132,17 @@ class FormularioTransferencias extends StatefulWidget {
 
   Future _savlarOnline(
       Transferencia transferencia, String passwd, BuildContext context) async {
-    dynamic salvo = await this
-        ._webClient
+    setState(() {
+      _enviando = true;
+    });
+
+    dynamic salvo = await widget._webClient
         .save(transferencia, passwd)
+        .whenComplete(() {
+          setState(() {
+            _enviando = false;
+          });
+        })
         .catchError(
           (e) => this
               ._showFailureMessage(context, 'Sem internet, tempo expirado.'),
@@ -96,62 +174,6 @@ class FormularioTransferencias extends StatefulWidget {
           message: message,
         );
       },
-    );
-  }
-
-  @override
-  State<StatefulWidget> createState() {
-    return FormularioTransferenciasState();
-  }
-}
-
-class FormularioTransferenciasState extends State<FormularioTransferencias> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Criando Transferência'),
-      ),
-      body: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 1.0),
-            child: Container(
-              child: Text(
-                widget.contato.nome,
-                style: TextStyle(
-                  fontSize: 16.0,
-                ),
-              ),
-              width: double.maxFinite,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 1.0, 8.0, 8.0),
-            child: Container(
-              child: Text(
-                widget.contato.conta.toString(),
-                style: TextStyle(
-                  fontSize: 28.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              width: double.maxFinite,
-            ),
-          ),
-          Editor(
-              ctrl: widget._ctrlCampoValor,
-              rotulo: 'Valor',
-              dica: '0.00',
-              icon: Icons.monetization_on),
-          RaisedButton(
-            child: Text('Confirmar'),
-            onPressed: () {
-              widget._criaTransferencia(context);
-            },
-          )
-        ]),
-      ),
     );
   }
 }
