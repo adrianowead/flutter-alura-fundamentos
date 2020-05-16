@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:bytebank/components/CarregandoSpinner.dart';
+import 'package:bytebank/components/ResponseDialog.dart';
 import 'package:bytebank/components/SemConteudo.dart';
+import 'package:bytebank/components/TransferenciaAuthDialog.dart';
 import 'package:bytebank/database/dao/ContatoDao.dart';
 import 'package:bytebank/http/webClients/TransacaoWebClient.dart';
 import 'package:bytebank/models/ItemContato.dart';
@@ -59,18 +61,52 @@ class ListaContatos extends StatelessWidget {
                           onClick: () {
                             final resp = Navigator.of(context).push(
                               MaterialPageRoute(builder: (context) {
-                                return FormularioTransferencias(contato: contato);
+                                return FormularioTransferencias(
+                                  contato: contato,
+                                );
                               }),
                             );
 
                             resp.then((transferencia) {
-                              this._webClient
-                                  .save(transferencia)
-                                  .then((salvo) {
-                                if (salvo != null) {
-                                  debugPrint('item salvo online');
-                                }
-                              });
+                              showDialog(
+                                context: context,
+                                builder: (contextAuth) {
+                                  return TransferenciaAuthDialog(
+                                    onConfirm: (String passwd) {
+                                      this
+                                          ._webClient
+                                          .save(transferencia, passwd)
+                                          .then((salvo) {
+                                        if (salvo != null) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (contextWarning) {
+                                              return SuccessDialog(
+                                                message:
+                                                    "Transação salva online com sucesso!",
+                                              );
+                                            },
+                                          ).then(
+                                            (value) => Navigator.pop(context),
+                                          );
+                                        }
+                                      }).catchError(
+                                        (e) {
+                                          showDialog(
+                                            context: context,
+                                            builder: (contextWarning) {
+                                              return ErrorDialog(
+                                                message: e.message,
+                                              );
+                                            },
+                                          );
+                                        },
+                                        test: (e) => e is Exception,
+                                      );
+                                    },
+                                  );
+                                },
+                              );
                             });
                           },
                         ),

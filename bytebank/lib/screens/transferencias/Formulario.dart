@@ -1,4 +1,5 @@
 import 'package:bytebank/components/Editor.dart';
+import 'package:bytebank/components/TransferenciaAuthDialog.dart';
 import 'package:bytebank/models/ItemContato.dart';
 import 'package:flutter/material.dart';
 
@@ -68,7 +69,9 @@ class FormularioTransferenciasState extends State<FormularioTransferencias> {
               icon: Icons.monetization_on),
           RaisedButton(
             child: Text('Confirmar'),
-            onPressed: () => widget._criaTransferencia(context),
+            onPressed: () {
+              widget._criaTransferencia(context);
+            },
           )
         ]),
       ),

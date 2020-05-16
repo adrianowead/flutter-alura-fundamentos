@@ -5,7 +5,7 @@ import 'package:bytebank/models/Transferencia.dart';
 import 'package:http/http.dart';
 
 class TransacaoWebClient extends WebClient {
-  final String _baseUrl = 'http://192.168.1.7:8080/transactions';
+  final String _baseUrl = 'http://192.168.1.5:8080/transactions';
 
   Future<List<Transferencia>> findAll() async {
     final Client client = this.geClient();
@@ -20,19 +20,23 @@ class TransacaoWebClient extends WebClient {
         .toList();
   }
 
-  Future<Transferencia> save(Transferencia transferencia) async {
+  Future<Transferencia> save(Transferencia transferencia, String passwd) async {
     final Client client = this.geClient();
-
-    print(transferencia.toJson());
 
     final Response response = await client.post(
       this._baseUrl,
       headers: {
         'Content-type': 'application/json',
-        'password': '1000',
+        'password': passwd,
       },
       body: jsonEncode(transferencia.toJson()),
     );
+
+    if (response.statusCode == 400) {
+      throw Exception("Falha ao enviar a transação!");
+    } else if (response.statusCode == 401) {
+      throw Exception("Falha na autenticação!");
+    }
 
     return Transferencia.fromJson(jsonDecode(response.body));
   }
