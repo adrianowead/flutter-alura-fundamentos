@@ -6,45 +6,55 @@ import 'package:flutter/material.dart';
 class Dashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Image.asset('images/bytebank_logo.png'),
-        ),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minHeight: constraints.maxHeight,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              ItemDashboard(
-                nome: 'Pessoas',
-                icone: Icons.people,
-                onClick: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ListaContatos(),
-                    ),
-                  );
-                },
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Image.asset('images/bytebank_logo.png'),
               ),
-              ItemDashboard(
-                nome: 'Transferências',
-                icone: Icons.swap_horiz, onClick: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ListaTransferencias(),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: <Widget>[
+                    ItemDashboard(
+                      nome: 'Pessoas',
+                      icone: Icons.people,
+                      onClick: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ListaContatos(),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
+                    ItemDashboard(
+                      nome: 'Transferências',
+                      icone: Icons.swap_horiz,
+                      onClick: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ListaTransferencias(),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
         ),
-      ],
+      ),
     );
   }
 }
