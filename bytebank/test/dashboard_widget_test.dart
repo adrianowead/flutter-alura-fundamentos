@@ -13,12 +13,33 @@ void main() {
     expect(mainImage, findsOneWidget);
   });
 
-  testWidgets('Deve apresentar os botoes abaixo quando o Dashboard é aberto',
+  testWidgets(
+      'Deve apresentar a funcionalidade de transferência quando o Dashboard é aberto',
       (WidgetTester tester) async {
     await tester.pumpWidget(MaterialApp(home: Dashboard()));
 
-    final feature = find.byType(ItemDashboard);
+    final featureItem = find.byWidgetPredicate((widget) =>
+        itemDashboardMatcher(widget, 'Transferências', Icons.swap_horiz));
 
-    expect(feature, findsWidgets);
+    expect(featureItem, findsOneWidget);
   });
+
+  testWidgets(
+      'Deve apresentar a funcionalidade de contatos quando o Dashboard é aberto',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(MaterialApp(home: Dashboard()));
+
+    final featureItem = find.byWidgetPredicate(
+        (widget) => itemDashboardMatcher(widget, 'Pessoas', Icons.people));
+
+    expect(featureItem, findsOneWidget);
+  });
+}
+
+bool itemDashboardMatcher(Widget widget, String name, IconData icon) {
+  if (widget is ItemDashboard) {
+    return widget.nome == name && widget.icone == icon;
+  }
+
+  return false;
 }
